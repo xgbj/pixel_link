@@ -99,7 +99,8 @@ def cal_gt_for_single_image(normed_xs, normed_ys, labels):
     
     # validate the args
     assert np.ndim(normed_xs) == 2
-    assert np.shape(normed_xs)[-1] == 4
+    # the dim must be box
+    # assert np.shape(normed_xs)[-1] == 4
     assert np.shape(normed_xs) == np.shape(normed_ys)
     assert len(normed_xs) == len(labels)
     

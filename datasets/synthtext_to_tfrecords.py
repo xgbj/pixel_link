@@ -1,8 +1,8 @@
 #encoding=utf-8
 import numpy as np;
 import tensorflow as tf
-import util;
-from dataset_utils import int64_feature, float_feature, bytes_feature, convert_to_example
+import util
+from .dataset_utils import int64_feature, float_feature, bytes_feature, convert_to_example
 
 # encoding = utf-8
 import numpy as np    

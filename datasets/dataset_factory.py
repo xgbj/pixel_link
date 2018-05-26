@@ -48,13 +48,23 @@ synthtext = DatasetConfig(
     }
 )
 
+ctw = DatasetConfig(
+    file_pattern = '*.tfrecord',
+#     file_pattern = 'SynthText_*.tfrecord',
+    split_sizes = {
+        'train': 1000,
+        'test' : 500
+    }
+)
+
 datasets_map = {
     'icdar2013':icdar2013,
     'icdar2015':icdar2015,
     'scut':scut,
     'td500':td500,
     'tr400':tr400,
-    'synthtext':synthtext
+    'synthtext':synthtext,
+    'ctw': ctw
 }
 
 
@@ -76,4 +86,6 @@ def get_dataset(dataset_name, split_name, dataset_dir, reader=None):
     dataset_config = datasets_map[dataset_name];
     file_pattern = dataset_config.file_pattern
     num_samples = dataset_config.split_sizes[split_name]
+    if dataset_name == 'ctw':
+        return dataset_utils.get_split_ctw(split_name, dataset_dir,file_pattern, num_samples, reader)
     return dataset_utils.get_split(split_name, dataset_dir,file_pattern, num_samples, reader)
