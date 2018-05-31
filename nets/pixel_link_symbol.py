@@ -48,10 +48,10 @@ class PixelLinkNet(object):
         else:
             raise ValueError('model_type not supported:%s'%(config.model_type))
         
-    def _score_layer(self, input_layer, num_classes, scope):
+    def _score_layer(self, input_layer, num_classes, scope, kernel_size=1):
         import config
         with slim.arg_scope(self.arg_scope):
-            logits = slim.conv2d(input_layer, num_classes, [1, 1], 
+            logits = slim.conv2d(input_layer, num_classes, [kernel_size, kernel_size],
                  stride=1,
                  activation_fn=None, 
                  scope='score_from_%s'%scope,
@@ -88,7 +88,7 @@ class PixelLinkNet(object):
                                                               scope = 'feature_fuse')
         return base_map
     
-    def _fuse_by_cascade_conv1x1_128_upsamle_concat_conv1x1_2(self, scope, num_classes = 32):
+    def _fuse_by_cascade_conv1x1_128_upsamle_concat_conv1x1_2(self, scope, num_classes = 32, kernel_size=1):
         import config
         num_layers = len(config.feat_layers)
         
@@ -98,7 +98,7 @@ class PixelLinkNet(object):
                 current_layer_name = config.feat_layers[idx]
                 current_layer = self.end_points[current_layer_name]
                 current_score_map = self._score_layer(current_layer, 
-                                      num_classes, current_layer_name)
+                                      num_classes, current_layer_name,kernel_size)
                 if smaller_score_map is None:
                     smaller_score_map = current_score_map
                 else:
@@ -108,7 +108,7 @@ class PixelLinkNet(object):
         return smaller_score_map
     
         
-    def _fuse_by_cascade_conv1x1_upsample_sum(self, num_classes, scope):
+    def _fuse_by_cascade_conv1x1_upsample_sum(self, num_classes, scope, kernel_size=1):
         """
         The feature fuse fashion of FCN for semantic segmentation:
         Suppose there are several feature maps with decreasing sizes , 
@@ -134,7 +134,7 @@ class PixelLinkNet(object):
                 current_layer_name = config.feat_layers[idx]
                 current_layer = self.end_points[current_layer_name]
                 current_score_map = self._score_layer(current_layer, 
-                                      num_classes, current_layer_name)
+                                      num_classes, current_layer_name, kernel_size)
                 if smaller_score_map is None:
                     smaller_score_map = current_score_map
                 else:
@@ -150,7 +150,7 @@ class PixelLinkNet(object):
                 config.num_classes, scope = 'pixel_cls')
             
             self.pixel_link_logits = self._fuse_by_cascade_conv1x1_upsample_sum(
-                config.num_neighbours * 2, scope = 'pixel_link')
+                config.num_neighbours * 2, scope = 'pixel_link', kernel_size=3)
             
         elif config.feat_fuse_type == FUSE_TYPE_cascade_conv1x1_128_upsamle_sum_conv1x1_2:
             base_map = self._fuse_by_cascade_conv1x1_128_upsamle_sum_conv1x1_2(
@@ -160,7 +160,7 @@ class PixelLinkNet(object):
                   config.num_classes, scope = 'pixel_cls')
             
             self.pixel_link_logits = self._score_layer(base_map,
-                   config.num_neighbours  * 2, scope = 'pixel_link')
+                   config.num_neighbours  * 2, scope = 'pixel_link', kernel_size=3)
         elif config.feat_fuse_type == FUSE_TYPE_cascade_conv1x1_128_upsamle_concat_conv1x1_2:
             base_map = self._fuse_by_cascade_conv1x1_128_upsamle_concat_conv1x1_2(
                                     scope = 'fuse_feature')

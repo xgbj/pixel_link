@@ -71,8 +71,8 @@ def config_initialization():
     config.load_config(FLAGS.checkpoint_path)
     config.init_config(image_shape, 
                        batch_size = 1, 
-                       pixel_conf_threshold = 0.8,
-                       link_conf_threshold = 0.8,
+                       pixel_conf_threshold = 0.5,
+                       link_conf_threshold = 0.5,
                        num_gpus = 1, 
                    )
     

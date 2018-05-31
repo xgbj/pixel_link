@@ -62,14 +62,14 @@ pixel_neighbour_type = pixel_link.PIXEL_NEIGHBOUR_TYPE_8
 #feat_layers = ['conv2_2', 'conv3_3', 'conv4_3', 'conv5_3', 'fc7']
 #strides = [2]
 model_type = pixel_link_symbol.MODEL_TYPE_vgg16
-feat_layers = ['conv3_3', 'conv4_3', 'conv5_3', 'fc7']
+feat_layers = ['conv4_3', 'conv5_3','fc7', 'conv8_2', 'conv9_2']
 strides = [4]
 
 pixel_cls_weight_method = pixel_link.PIXEL_CLS_WEIGHT_bbox_balanced
 bbox_border_width = 1
 pixel_cls_border_weight_lambda = 1.0
 pixel_cls_loss_weight_lambda = 2.0
-pixel_link_neg_loss_weight_lambda = 1.0
+pixel_link_neg_loss_weight_lambda = 1.5
 pixel_link_loss_weight = 1.0
 #====================Training and model params END ==================
 #=====================================================================

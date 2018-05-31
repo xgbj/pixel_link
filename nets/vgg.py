@@ -54,5 +54,21 @@ def basenet(inputs, fatness = 64, dilation = True):
         net = slim.conv2d(net, fatness * 16, [1, 1], scope='fc7')
         end_points['fc7'] = net
 
+        net = slim.conv2d(net, 256, [1, 1], scope='conv6_1')
+        net = slim.conv2d(net, 512, [3, 3], stride=2, scope='conv6_2', padding='SAME')
+        end_points['conv6_2'] = net
+
+        net = slim.conv2d(net, 128, [1, 1], scope='conv7_1')
+        net = slim.conv2d(net, 256, [3, 3], stride=2, scope='conv7_2', padding='SAME')
+        end_points['conv7_2'] = net
+
+        net = slim.conv2d(net, 128, [1, 1], scope='conv8_1')
+        net = slim.conv2d(net, 256, [3, 3], stride=2, scope='conv8_2', padding='SAME')
+        end_points['conv8_2'] = net
+
+        net = slim.conv2d(net, 128, [1, 1], scope='conv9_1')
+        net = slim.conv2d(net, 256, [3, 3], stride=2, scope='conv9_2', padding='SAME')
+        end_points['conv9_2'] = net
+
     return net, end_points;    
 
